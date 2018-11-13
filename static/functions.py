@@ -19,6 +19,11 @@ def get_prediction(ev):
 
 document["predict_button"].bind("click", get_prediction)
 
+def update_live_stream():
+    document["data_stream"].html = raw_data['data'][0]['country']
+
+
+
 
 
 
