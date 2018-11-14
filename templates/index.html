@@ -4,18 +4,115 @@
 		<script type="text/javascript" src="brython.js"></script>
 		<script type="text/javascript" src="brython_stdlib.js"></script>
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-                
+                 -->
 	</head>
+	
 	<body onload="brython(1)">
-		<script type="text/python3" src="functions.py"></script>
-		<script type="text/python3" src="data_pipeline.py"></script>
+		<script type="text/python3">
+			from browser import document, ajax
+			import json
+			
+			
+			import time
+			import math
+			import datetime
+			
+			import browser.timer
+			
+			def on_complete(req):
+				if req.status==200 or req.status==0:
+					document["result"].html = req.text
+				else:
+					document["result"].html = "error " + req.text
+			
+			def get_prediction(ev):
+				"""Get the predicted probability."""
+				req = ajax.ajax()
+				req.bind('complete', on_complete)
+				req.open('POST', '/predict', True)
+				req.set_header('content-type','application/json')
+				data = json.dumps({'user_input': document['user_input'].value})
+				req.send(data)
+			
+			document["predict_button"].bind("click", get_prediction)
+		
+		
+		</script>
+		<nav class="#90caf9 blue lighten-2">
+			<div class="nav-wrapper">
+				<a href="#" class="brand-logo">&nbsp;&nbsp;&nbsp;Fraudect</a>
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li><i class="large material-icons">insert_chart</i>About &nbsp;&nbsp;&nbsp;</li>
+					<li><i class="large material-icons">android</i>More &nbsp;&nbsp;&nbsp;</li>
+					<li><i class="large material-icons">email</i>Contact &nbsp;&nbsp;</li>
+				</ul>
+			</div>
+		</nav>
+
+<!-- Questions Here!!!! -->
         <textarea id="user_input"></textarea>
 		<button id="predict_button">Predict!</button>
 		<div id="result"></div>
-        <a id="get_new_data" class="waves-effect waves-light btn"><i class="material-icons right">cloud</i>Get Latest Data!</a>
-        <div id="data_stream"></div>
+		<button id="get_new_data">Get New Data!!</button>        
+		<div id="data_stream"></div>
+
+
+		<div id="data_table" class="row">
+			<div class="col s3"></div>
+			<div class="col s6">
+				<ul class="collection">
+					<li class="collection-item avatar row">
+						<div class="col s8">
+							<i class="material-icons circle">folder</i>
+							<span class="title">Title</span>
+							<p>First Line <br>
+								Second Line
+							</p>
+						</div>
+						<div class="col s4">
+							<div class="switch">
+									<label>
+									Ok
+									<input type="checkbox">
+									<span class="lever"></span>
+									Fraud
+									</label>
+							</div>
+						</div>
+					</li>
+
+					<li class="collection-item avatar">
+					<i class="material-icons circle">folder</i>
+					<span class="title">Title</span>
+					<p>First Line <br>
+						Second Line
+					</p>
+					<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+					</li>
+					<li class="collection-item avatar">
+					<i class="material-icons circle green">insert_chart</i>
+					<span class="title">Title</span>
+					<p>First Line <br>
+						Second Line
+					</p>
+					<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+					</li>
+					<li class="collection-item avatar">
+					<i class="material-icons circle red">play_arrow</i>
+					<span class="title">Title</span>
+					<p>First Line <br>
+						Second Line
+					</p>
+					<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+					</li>
+				</ul>
+			</div>
+			<div class="col s3"></div>
+		</div>
+				   
 	</body>
 </html>

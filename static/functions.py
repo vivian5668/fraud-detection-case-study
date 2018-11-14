@@ -2,6 +2,12 @@ from browser import document, ajax
 import json
 
 
+import time
+import math
+import datetime
+
+import browser.timer
+
 def on_complete(req):
     if req.status==200 or req.status==0:
         document["result"].html = req.text
@@ -19,8 +25,7 @@ def get_prediction(ev):
 
 document["predict_button"].bind("click", get_prediction)
 
-def update_live_stream():
-    document["data_stream"].html = raw_data['data'][0]['country']
+
 
 
 
