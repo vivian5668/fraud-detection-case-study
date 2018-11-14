@@ -10,7 +10,7 @@ from pymongo import MongoClient
 client = MongoClient()
 
 
-with open('spam_model.pkl', 'rb') as f:
+with open('fraud.pkl', 'rb') as f:
     model = pickle.load(f)
 app = Flask(__name__, static_url_path="")
 
@@ -25,9 +25,9 @@ for datum in data:
     temp.append(datum['data'][0]['email_domain'])
     temp.append(datum['data'][0]['user_age'])
     prediction = model.predict_proba(datum)
+    temp.append(prediction)
+    print(prediction)
     content.append(temp)
-
-print('content: ' + str(content))
 
 @app.route('/')
 def index():
@@ -48,11 +48,11 @@ def index():
                             country5 = content[4][0],
                             email5 = content[4][1],
                             age5 = content[4][2],  
-                            probability1 = content[0][3]    
-                            probability2 = content[1][3] 
-                            probability3 = content[2][3] 
-                            probability4 = content[3][3]   
-                            probability5 = content[4][3]                                                                                                         
+                            probability1 = content[0][3],    
+                            probability2 = content[1][3],
+                            probability3 = content[2][3],
+                            probability4 = content[3][3],  
+                            probability5 = content[4][3]                                                                                                        
                             )
 
 

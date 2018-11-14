@@ -6,6 +6,7 @@
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="index.css" rel="stylesheet">
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
                 
@@ -52,14 +53,11 @@
 				</ul>
 			</div>
 		</nav>
-
-<!-- to delete !!!! -->
-        <textarea id="user_input"></textarea>
-		<button id="predict_button">Predict!</button>
-		<div id="result"></div>
-		<button id="get_new_data">Get New Data!!</button>        
-		<div id="data_stream"></div>
-
+		<div class="row">
+			<div class="col s3"></div>
+			<img class="center col s6" id='detect' src='detect.png' alt='hero item picture' width="600px">
+			<div class="col s3"></div>
+		</div>
 
 		<div id="data_table" class="row">
 			<div class="col s3"></div>
@@ -72,6 +70,7 @@
 							<p>email demain: {{email1}} <br>
 								user age: {{age1}}
 							</p>
+							<p id="probability">Fraud probability: {{probability1}}</p>
 						</div>
 						<div class="col s4">
 							<div class="switch">
@@ -92,6 +91,7 @@
 							<p>email demain: {{email2}} <br>
 								user age: {{age2}}
 							</p>
+							<p id="probability">Fraud probability: {{probability2}}</p>
 						</div>
 						<div class="col s4">
 							<div class="switch">
@@ -111,6 +111,7 @@
 							<p>email demain: {{email3}} <br>
 								user age: {{age3}}
 							</p>
+							<p id="probability">Fraud probability: {{probability3}}</p>
 						</div>
 						<div class="col s4">
 							<div class="switch">
@@ -131,6 +132,7 @@
 							<p>email demain: {{email4}} <br>
 								user age: {{age4}}
 							</p>
+							<p id="probability">Fraud probability: {{probability4}}</p>
 						</div>
 						<div class="col s4">
 							<div class="switch">
@@ -151,6 +153,7 @@
 							<p>email demain: {{email5}} <br>
 								user age: {{age5}}
 							</p>
+							<p id="probability">Fraud probability: {{probability5}}</p>
 						</div>
 						<div class="col s4">
 							<div class="switch">
