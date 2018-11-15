@@ -16,12 +16,11 @@ from sklearn.base import BaseEstimator, TransformerMixin
 #when new data comes into the pipeline, it can handle
 class Dummifier(BaseEstimator, TransformerMixin):
     """Dummify certain columns in a DataFrame"""
-    def __init__(self, columns=None):
-        if columns==None:
+    def __init__(self, cols_to_dummy=None):
+        if cols_to_dummy==None:
             self.cols_to_dummy = ['channels', 
                                   'country', 
                                   'currency', 
-                                  'delivery_method',
                                   'fb_published', 
                                   'has_analytics', 
                                   'has_header', 
@@ -51,6 +50,8 @@ class Dummifier(BaseEstimator, TransformerMixin):
         for col in self.cols_to_dummy:
             columns = self.unique_items[col]
             for item in columns:
+                if item==None:
+                    continue
                 dummy_df[f'{col}_{item}'] = df[col]==item
             dummy_df = dummy_df.iloc[:,:-1]    
         df = df.drop(self.cols_to_dummy, axis=1)

@@ -66,7 +66,7 @@ def get_training_data():
     standarizer = Standardizer()
     standarizer.fit(df)
     df = standarizer.transform(df)
-    return df, y, imputer, dummier, standarizer
+    return df, y
 
 def train(df, y):
     splits = split_once(df, y)
@@ -76,10 +76,10 @@ def train(df, y):
     X_test = df.iloc[te_idx,:]
     y_train = y.iloc[tr_idx] 
     y_test = y.iloc[te_idx]
-    clf = RandomForestClassifier(n_estimators=50000, class_weight={0: 1, 1:5})
+    clf = RandomForestClassifier(n_estimators=5000, class_weight={0: 1, 1:20}, max_depth=25)
     clf.fit(X_train, y_train)
     preds = clf.predict_proba(X_test)
-    return log_loss(y_test, preds.T[1])
+    return log_loss(y_test, preds.T[1]), clf
 
 def fraud_pipeline():
     pipeline = Pipeline([
@@ -87,8 +87,10 @@ def fraud_pipeline():
         ('imputer', Imputer()),
         ('dummifier', Dummifier()),
         ('standardizer', Standardizer()),
-        ('model', RandomForestClassifier(n_estimators=10000))
-    ])
+        ('model', RandomForestClassifier(n_estimators=5000, 
+                                         class_weight={0: 1, 1:10}, 
+                                         max_depth=25))
+        ])
     return pipeline
 
 def pickle_pipeline(pipeline):
@@ -97,7 +99,7 @@ def pickle_pipeline(pipeline):
         pickle.dump(pipeline, f)
 
 def split_once(df,y):
-    sss = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=0)
+    sss = StratifiedShuffleSplit(n_splits=1, test_size=0.2)
     split = sss.split(df, y)
     splits = list(split)
     return splits
