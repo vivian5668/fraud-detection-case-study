@@ -78,7 +78,7 @@ def train(df, y):
     X_test = df.iloc[te_idx,:]
     y_train = y.iloc[tr_idx] 
     y_test = y.iloc[te_idx]
-    clf = RandomForestClassifier(n_estimators=5000, class_weight={0: 1, 1:20}, max_depth=25)
+    clf = RandomForestClassifier(n_estimators=5000, max_depth=25)
     clf.fit(X_train, y_train)
     preds = clf.predict_proba(X_test)
     return log_loss(y_test, preds.T[1]), clf
@@ -91,14 +91,13 @@ def fraud_pipeline():
         ('dummifier', Dummifier()),
         ('standardizer', Standardizer()),
         ('model', RandomForestClassifier(n_estimators=5000, 
-                                         class_weight={0: 1, 1:10}, 
                                          max_depth=25))
         ])
     return pipeline
 
-def pickle_pipeline(pipeline):
+def pickle_pipeline(pipeline, output_name):
     """Save fitted pipeline to pickle file"""
-    with open('fraud_1pi.pkl', 'wb') as f:
+    with open(output_name, 'wb') as f:
         pickle.dump(pipeline, f)
 
 def split_once(df,y):
@@ -108,4 +107,3 @@ def split_once(df,y):
     split = sss.split(df, y)
     splits = list(split)
     return splits
-
