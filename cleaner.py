@@ -14,7 +14,6 @@ class Featurizer(BaseEstimator, TransformerMixin):
                             'channels', 
                             'country', 
                             'currency', 
-                            'delivery_method',
                             'description', 
                             'email_domain', 
                             'event_created', 
@@ -56,10 +55,11 @@ class Featurizer(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
         """tranform and clean incoming training or test"""
-        df = X
-        df = df[self.cols]
+        df = X.copy()
+        df = df.loc[:,self.cols]
         df['event_duration'] = df['event_end']-df['event_start']
         df['has_payee_name'] = df['payee_name'].apply(self.is_empty)
+        df['has_header'] = df['has_header'].fillna(0)
         df['has_previous_payouts'] = df['previous_payouts'].apply(self.is_empty)
         df['has_payout_type'] = df['payout_type'].apply(self.is_empty)
         df['has_facebook'] = df['org_facebook'].apply(self.is_not_zero)
@@ -143,7 +143,6 @@ class Imputer(BaseEstimator, TransformerMixin):
                                 'channels':'cat', 
                                 'country':'cat', 
                                 'currency':'cat', 
-                                'delivery_method':'cat',
                                 'fb_published':'cat', 
                                 'has_analytics':'cat', 
                                 'has_header':'cat', 
