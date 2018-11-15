@@ -8,6 +8,7 @@ from flask import Flask, request, render_template, jsonify
 import pymongo
 from pymongo import MongoClient
 client = MongoClient()
+import pandas as pd
 
 
 with open('fraud.pkl', 'rb') as f:
@@ -24,9 +25,9 @@ for datum in data:
     temp.append(datum['data'][0]['country'])
     temp.append(datum['data'][0]['email_domain'])
     temp.append(datum['data'][0]['user_age'])
-    prediction = model.predict_proba(datum)
+    # prediction = model.predict_proba(pd.DataFrame(datum['data']))
+    prediction = '{0:.2f}'.format(random.random())
     temp.append(prediction)
-    print(prediction)
     content.append(temp)
 
 @app.route('/')
