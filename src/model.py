@@ -10,8 +10,7 @@ from sklearn.pipeline import Pipeline
 import pickle
 
 def load(file):
-    """Return X and y from training data"""
-
+    """Return X and y from training data, no manipuation"""
     data = pd.read_json(file)
     data['fraud'] = data['acct_type'].str.contains('fraud')
     cols = ['body_length', 
@@ -55,7 +54,8 @@ def load(file):
     return data[cols], data['fraud']
 
 def get_training_data():
-    X, y = load('data/data.json')
+    """Automatically get data, clean, and featurize data"""
+    X, y = load('../data/data.json')
     X_cleaned = Featurizer().transform(X)
     imputer = Imputer()
     imputer.fit(X_cleaned)
@@ -68,7 +68,9 @@ def get_training_data():
     df = standarizer.transform(df)
     return df, y
 
-def train(df, y):
+def train(df, y): 
+    """Input cleaned, featurized data, train/test split, 
+    train and return a log-loss"""
     splits = split_once(df, y)
     te_idx = splits[0][0]
     tr_idx = splits[0][1]
@@ -82,6 +84,7 @@ def train(df, y):
     return log_loss(y_test, preds.T[1]), clf
 
 def fraud_pipeline():
+    """instantiate a pipeline object"""
     pipeline = Pipeline([
         ('featurizer', Featurizer()),
         ('imputer', Imputer()),
@@ -94,11 +97,13 @@ def fraud_pipeline():
     return pipeline
 
 def pickle_pipeline(pipeline):
-    """Save my pipeline to pickle file"""
-    with open('fraud.pkl', 'wb') as f:
+    """Save fitted pipeline to pickle file"""
+    with open('fraud_1pi.pkl', 'wb') as f:
         pickle.dump(pipeline, f)
 
 def split_once(df,y):
+    """split data using StratifiedShuffleSplit 
+    and return split indexes"""
     sss = StratifiedShuffleSplit(n_splits=1, test_size=0.2)
     split = sss.split(df, y)
     splits = list(split)
