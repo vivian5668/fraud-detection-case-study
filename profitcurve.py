@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 
 cb_matrix = pd.DataFrame([[-50, -500],[-50,0]], columns = ['Fraud', 'Not Fraud'], index = ['Fraud', 'Not Fraud'])
 thresholds = np.arange(0.0, 1.0, 0.01)
-confusion_matrix = pd.DataFrame([[0.6, 0.4],[0.2, 0.2]], columns = ['Fraud', 'Not Fraud'], index = ['Fraud', 'Not Fraud'])
+
+
+
 
 def calculate_payout(confusion_matrix, cb_matrix):
     return (confusion_matrix, cb_matrix).values.sum()
