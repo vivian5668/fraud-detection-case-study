@@ -104,3 +104,8 @@ venv.bak/
 .mypy_cache/
 
 data/
+
+fraud_pkl.zip
+fraud.pkl
+.DS_Store
+

@@ -3,31 +3,173 @@
 		<title>Predict</title>
 		<script type="text/javascript" src="brython.js"></script>
 		<script type="text/javascript" src="brython_stdlib.js"></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="index.css" rel="stylesheet">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+                
 	</head>
+	
 	<body onload="brython(1)">
 		<script type="text/python3">
-      from browser import document, ajax
-      import json
-
-      def on_complete(req):
-          if req.status==200 or req.status==0:
-              document["result"].html = req.text
-          else:
-              document["result"].html = "error " + req.text
-
-      def get_prediction(ev):
-          """Get the predicted probability."""
-          req = ajax.ajax()
-          req.bind('complete', on_complete)
-          req.open('POST', '/predict', True)
-          req.set_header('content-type','application/json')
-          data = json.dumps({'user_input': document['user_input'].value})
-          req.send(data)
-
-      document["predict_button"].bind("click", get_prediction)
+			from browser import document, ajax
+			import json
+			
+			
+			import time
+			import math
+			import datetime
+			
+			import browser.timer
+			
+			def on_complete(req):
+				if req.status==200 or req.status==0:
+					document["result"].html = req.text
+				else:
+					document["result"].html = "error " + req.text
+			
+			def get_prediction(ev):
+				"""Get the predicted probability."""
+				req = ajax.ajax()
+				req.bind('complete', on_complete)
+				req.open('POST', '/predict', True)
+				req.set_header('content-type','application/json')
+				data = json.dumps({'user_input': document['user_input'].value})
+				req.send(data)
+			
+			document["predict_button"].bind("click", get_prediction)
+		
+		
 		</script>
-    <textarea id="user_input"></textarea>
-		<button id="predict_button">Predict!</button>
-		<div id="result"></div>
+		<nav class="#90caf9 blue lighten-2">
+			<div class="nav-wrapper">
+				<a href="#" class="brand-logo">&nbsp;&nbsp;&nbsp;Fraudect</a>
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li><i class="large material-icons">insert_chart</i>About &nbsp;&nbsp;&nbsp;</li>
+					<li><i class="large material-icons">android</i>More &nbsp;&nbsp;&nbsp;</li>
+					<li><i class="large material-icons">email</i>Contact &nbsp;&nbsp;</li>
+				</ul>
+			</div>
+		</nav>
+		<div class="row">
+			<div class="col s3"></div>
+			<img class="center col s6" id='detect' src='detect.png' alt='hero item picture' width="600px">
+			<div class="col s3"></div>
+		</div>
+
+		<div id="data_table" class="row">
+			<div class="col s3"></div>
+			<div class="col s6">
+				<ul class="collection">
+					<li class="collection-item avatar row">
+						<div class="col s8">
+							<i class="material-icons circle">folder</i>
+							<span class="title">country: {{country1}}</span>
+							<p>email demain: {{email1}} <br>
+								user age: {{age1}}
+							</p>
+							<p id="probability">Fraud probability: {{probability1}}</p>
+						</div>
+						<div class="col s4">
+							<div class="switch">
+									<label>
+									Ok
+									<input type="checkbox">
+									<span class="lever"></span>
+									Fraud
+									</label>
+							</div>
+						</div>
+					</li>
+
+					<li class="collection-item avatar row">
+						<div class="col s8">
+							<i class="material-icons circle green">insert_chart</i>
+							<span class="title">country: {{country2}}</span>
+							<p>email demain: {{email2}} <br>
+								user age: {{age2}}
+							</p>
+							<p id="probability">Fraud probability: {{probability2}}</p>
+						</div>
+						<div class="col s4">
+							<div class="switch">
+									<label>
+									Ok
+									<input type="checkbox">
+									<span class="lever"></span>
+									Fraud
+									</label>
+							</div>
+						</div>
+					</li>
+					<li class="collection-item avatar row">
+						<div class="col s8">
+							<i class="material-icons circle red">play_arrow</i>
+							<span class="title">country: {{country3}}</span>
+							<p>email demain: {{email3}} <br>
+								user age: {{age3}}
+							</p>
+							<p id="probability">Fraud probability: {{probability3}}</p>
+						</div>
+						<div class="col s4">
+							<div class="switch">
+									<label>
+									Ok
+									<input type="checkbox">
+									<span class="lever"></span>
+									Fraud
+									</label>
+							</div>
+						</div>
+					</li>
+
+					<li class="collection-item avatar row">
+						<div class="col s8">
+							<i class="material-icons circle green">insert_chart</i>
+							<span class="title">country: {{country4}}</span>
+							<p>email demain: {{email4}} <br>
+								user age: {{age4}}
+							</p>
+							<p id="probability">Fraud probability: {{probability4}}</p>
+						</div>
+						<div class="col s4">
+							<div class="switch">
+									<label>
+									Ok
+									<input type="checkbox">
+									<span class="lever"></span>
+									Fraud
+									</label>
+							</div>
+						</div>
+					</li>
+					
+					<li class="collection-item avatar row">
+						<div class="col s8">
+							<i class="material-icons circle">folder</i>
+							<span class="title">country: {{country5}}</span>
+							<p>email demain: {{email5}} <br>
+								user age: {{age5}}
+							</p>
+							<p id="probability">Fraud probability: {{probability5}}</p>
+						</div>
+						<div class="col s4">
+							<div class="switch">
+									<label>
+									Ok
+									<input type="checkbox">
+									<span class="lever"></span>
+									Fraud
+									</label>
+							</div>
+						</div>
+					</li>	
+				</ul>
+			</div>
+			<div class="col s3"></div>
+		</div>
+				   
 	</body>
 </html>
